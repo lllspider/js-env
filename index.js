@@ -4,7 +4,7 @@ const Tool = require(`${__dirname}/Tools/ToolCode.js`);
 const WebSocket = require('ws');
 
 const VMCode = Tool.GetVMCode(0);
-const ivm = require(`${__dirname}/Tools/isolated-rsvm.node`).ivm;
+const ivm = require(`${__dirname}/Tools/isolated_rsvm.node`).ivm;
 
 let code = VMCode + fs.readFileSync(`${__dirname}/Sites/rs_药监局.js`);
 
