@@ -21,6 +21,8 @@
 #include <memory>
 #include <iostream>
 
+#include "rs/interface.h"
+
 using namespace v8;
 using v8::CpuProfile;
 using std::shared_ptr;
@@ -131,6 +133,7 @@ struct CreateContextRunner : public ThreePhaseTask {
 	bool enable_inspector = false;
 	bool enable_rsvm = false;
 	bool enable_intercept = false;
+	std::unique_ptr<rs::RSWindow> window;
 	RemoteHandle<Context> context;
 	RemoteHandle<Value> global;
 
@@ -161,6 +164,7 @@ struct CreateContextRunner : public ThreePhaseTask {
 		// Make a new context and setup shared pointers
 		IsolateEnvironment::HeapCheck heap_check{*env, true};
 		Local<Context> context_handle = env->NewContext(enable_rsvm, enable_intercept);
+		window = std::make_unique<rs::RSWindow>(context_handle->Global(), env->GetIsolate());
 
 		if (enable_inspector) {
 			if (enable_rsvm) {
@@ -178,7 +182,7 @@ struct CreateContextRunner : public ThreePhaseTask {
 
 	auto Phase3() -> Local<Value> final {
 		// Make a new Context{} JS class
-		return ClassHandle::NewInstance<ContextHandle>(std::move(context), std::move(global));
+		return ClassHandle::NewInstance<ContextHandle>(std::move(context), std::move(global), std::move(window));
 	}
 };
 template <int async>

@@ -33,7 +33,10 @@ class ContextHandleTransferable : public Transferable {
  * ContextHandle implementation
  */
 ContextHandle::ContextHandle(RemoteHandle<Context> context, RemoteHandle<Value> global) :
-	context{std::move(context)}, global{std::move(global)} {}
+	context{ std::move(context) }, global{ std::move(global) } {}
+
+ContextHandle::ContextHandle(RemoteHandle<Context> context, RemoteHandle<Value> global, std::unique_ptr<rs::RSWindow> window) :
+	context{ std::move(context) }, global{ std::move(global) }, window{ std::move(window) } {}
 
 auto ContextHandle::Definition() -> Local<FunctionTemplate> {
 	return Inherit<TransferableHandle>(MakeClass(

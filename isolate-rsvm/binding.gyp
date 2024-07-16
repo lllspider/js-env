@@ -60,10 +60,16 @@
 				[ 'OS == "linux"', { 'defines': [ 'USE_CLOCK_THREAD_CPUTIME_ID' ] } ],
 			],
 			'sources': [
-				'src/rs/api.h',
 				'src/rs/tool.h',
-				'src/rs/browser/EventTarget.h',
+				'src/rs/tool.cc',
+				'src/rs/rsvm.h',
+				'src/rs/rsvm.cc',
+				'src/rs/browser/event_target.h',
+				'src/rs/browser/event_target.cc',
 				'src/rs/browser/window.h',
+				'src/rs/browser/window.cc',
+				'src/rs/interface.h',
+				'src/rs/interface.cc',
 				
 				'src/external_copy/external_copy.cc',
 				'src/external_copy/serializer.cc',

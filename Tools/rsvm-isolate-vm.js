@@ -1,7 +1,6 @@
+
 // 所有的工具对象
 Object.assign(rsvm, {
-    atob: atob,
-    btoa: btoa,
     // getRandomValues: getRandomValues,
     // 调试设置
     ifProxy: true, log: false,
@@ -290,48 +289,56 @@ Object.assign(rsvm, {
 
 !function () {
     delete window.SharedArrayBuffer;
+
     rsvm.$log = console.log;
-    console.log = function log() { }
+    // console.log = function log() { }
     rsvm.print = function log() {
         return rsvm.$log.apply(console, arguments);
     }
-
-    Object.defineProperty(Date.prototype, "now", {
-        value: rsvm.RsCreateFunction({
-            isConstruct: false,
-            name: "now",
-            length: 0,
-            notConstructCall() {
-                return rsvm.$now.apply(this, arguments) + rsvm.addTime;
-            }
-        }), writable: true, enumerable: false, configurable: true
-    });
+    // rsvm.ttt = []
+    // let $last = 0, last = 0;
+    // Date.now = rsvm.RsCreateFunction(false, "now", 0, function () {
+    //     let now = rsvm.$now.apply(this, arguments);
+    //     if (!last){
+    //         last = now;
+    //     }else{
+    //         let delay = now - $last;
+    //         if (delay >= 10){
+    //             last += parseInt(delay/200)
+    //         }else{
+    //             last += delay
+    //         }
+    //         last += delay
+    //     }
+    //     $last = now;
+    //     rsvm.$log.call(console, {"时间": "Date.now()", "值": last});
+    //     rsvm.ttt.push(last);
+    //     return last;
+    // })
+    // Object.defineProperty(Date.prototype, "now", {
+    //     value: rsvm.RsCreateFunction(false, "now", 0, function () {
+    //         let now = rsvm.$now.apply(this, arguments) + rsvm.addTime;
+    //         rsvm.$log.call(console, {"时间": "Date.now()", "值": now});
+    //         rsvm.ttt.push(now);
+    //         return now;
+    //     }), writable: true, enumerable: false, configurable: true
+    // });
 
     rsvm.$getTime = Date.prototype.getTime;
     Object.defineProperty(Date.prototype, "getTime", {
-        value: rsvm.RsCreateFunction({
-            isConstruct: false,
-            name: "getTime",
-            length: 0,
-            notConstructCall() {
-                return rsvm.$getTime.apply(this, arguments) + rsvm.addTime;
-            }
+        value: rsvm.RsCreateFunction(false, "getTime", 0, function () {
+            return rsvm.$getTime.apply(this, arguments) + rsvm.addTime;
         }), writable: true, enumerable: false, configurable: true
     });
 
     Object.defineProperty(Array.prototype, "toReversed", {
-        value: rsvm.RsCreateFunction({
-            isConstruct: false,
-            name: "toReversed",
-            length: 0,
-            notConstructCall() {
-                let ary = [];
-                for (const elem of this) {
-                    ary.push(elem);
-                }
-                ary.reverse();
-                return ary;
+        value: rsvm.RsCreateFunction(false, "toReversed", 0, function () {
+            let ary = [];
+            for (const elem of this) {
+                ary.push(elem);
             }
+            ary.reverse();
+            return ary;
         }), writable: true, enumerable: false, configurable: true
     });
 }();

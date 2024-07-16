@@ -19,7 +19,7 @@
 #include <vector>
 #include "v8-platform.h"
 #include "v8.h"
-#include "../rs/api.h"
+#include "rs/browser/window.h"
 
 #if USE_CLOCK_THREAD_CPUTIME_ID
 #include <time.h>
@@ -470,13 +470,8 @@ static void DeserializeInternalFieldsCallback(Local<Object> /*holder*/, int /*in
 
 
 auto IsolateEnvironment::NewContext(bool rsvm, bool interceptor) -> Local<Context> {
-	Local<Context> context;
-	if (rsvm) {
-		context = Context::New(isolate, nullptr, rsvm::CreateGlobal(isolate, interceptor), {}, &DeserializeInternalFieldsCallback);
-	}
-	else {
-		context = Context::New(isolate, nullptr, {}, {}, &DeserializeInternalFieldsCallback);
-	}
+	MaybeLocal<ObjectTemplate> global_template = rsvm ? rs::CreateRsGlobalTemplate(isolate, interceptor) : MaybeLocal<ObjectTemplate>();
+	Local<Context> context = Context::New(isolate, nullptr, global_template, {}, & DeserializeInternalFieldsCallback);
 	context->AllowCodeGenerationFromStrings(false);
 	// TODO (but I'm not going to do it): This causes a DCHECK failure in debug builds. Tested nodejs
 	// v14.17.3 & v16.5.1.

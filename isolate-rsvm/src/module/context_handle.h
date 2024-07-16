@@ -4,11 +4,14 @@
 #include <v8.h>
 #include <memory>
 
+#include "rs/rsvm.h"
+
 namespace ivm {
 
 class ContextHandle : public TransferableHandle {
 	public:
 		ContextHandle(RemoteHandle<v8::Context> context, RemoteHandle<v8::Value> global);
+		ContextHandle(RemoteHandle<v8::Context> context, RemoteHandle<v8::Value> global, std::unique_ptr<rs::RSWindow> window);
 		static auto Definition() -> v8::Local<v8::FunctionTemplate>;
 		auto TransferOut() -> std::unique_ptr<Transferable> final;
 
@@ -30,6 +33,8 @@ class ContextHandle : public TransferableHandle {
 		RemoteHandle<v8::Context> context;
 		RemoteHandle<v8::Value> global;
 		RemoteHandle<v8::Object> global_reference;
+
+		std::unique_ptr<rs::RSWindow> window;
 };
 
 } // namespace ivm

@@ -9,11 +9,10 @@ const ivm = require(`${__dirname}/Tools/isolated_rsvm.node`).ivm;
 let code = VMCode + fs.readFileSync(`${__dirname}/Sites/rs_药监局.js`);
 
 let isolate = new ivm.Isolate({ inspector: true, memoryLimit: 1024 });
-let context = null;
 (async function () {
     let context = await isolate.createContext({ inspector: true, rsvm: true, intercept: true });
 
-    const inspector = isolate.createInspectorSession(); 
+    let inspector = isolate.createInspectorSession(); 
     inspector.dispatchProtocolMessage('{"id":1,"method":"Debugger.enable"}');
 
     let script = await isolate.compileScriptSync(code, { filename: 'example.js' });
