@@ -11,12 +11,16 @@ let code = VMCode + fs.readFileSync(`${__dirname}/Sites/rs_药监局.js`);
 let isolate = new ivm.Isolate({ inspector: true, memoryLimit: 1024 });
 let context = null;
 (async function () {
-    context = await isolate.createContext({ inspector: true, rsvm: true, intercept: true });
+    let context = await isolate.createContext({ inspector: true, rsvm: true, intercept: true });
 
-    debugger
+    const inspector = isolate.createInspectorSession(); 
+    inspector.dispatchProtocolMessage('{"id":1,"method":"Debugger.enable"}');
+
     let script = await isolate.compileScriptSync(code, { filename: 'example.js' });
     let result = await script.run(context);
     console.log(result);
+
+    inspector.dispose();
 }()).catch(console.error);
 
 const PORT = 9229;
@@ -24,6 +28,7 @@ let wss = new WebSocket.Server({ port: PORT });
 wss.on('connection', function (ws) {
     // Dispose inspector session on websocket disconnect
     let channel = isolate.createInspectorSession();
+
     function dispose() {
         try {
             channel.dispose();
