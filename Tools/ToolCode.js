@@ -9,7 +9,6 @@ function GetVMCode(type) {
         code += fs.readFileSync(`${__dirname}/rsvm-vm2.js`) + '\r\n';
     }
     code += fs.readFileSync(`${__dirname}/parser.js`) + '\r\n';
-    code += fs.readFileSync(`${__dirname}/event.js`) + '\r\n';
     code += Browser.GetBrowserCode(type); 
     code += fs.readFileSync(`${__dirname}/fingerprint.js`) + '\r\n';
     return code;
