@@ -6,7 +6,7 @@ const WebSocket = require('ws');
 const VMCode = Tool.GetVMCode(0);
 const ivm = require(`${__dirname}/Tools/isolated-rsvm.node`).ivm;
 
-let code = VMCode + fs.readFileSync(`${__dirname}/Sites/rs6_药监局.js`);
+let code = VMCode + fs.readFileSync(`${__dirname}/Sites/rs_药监局.js`);
 
 let isolate = new ivm.Isolate({ inspector: true, memoryLimit: 1024 });
 (async function () {
