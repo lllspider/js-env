@@ -5,7 +5,7 @@
 
 后续再更新使用文档
 
-## 操作浏览器对象绑定的属性值
+### 操作浏览器对象绑定的属性值
 + 获取值(不触发访问器)
     ```js
     var cookie = rsvm.get(document, "cookie");
@@ -17,15 +17,15 @@
     rsvm.set(document, "cookie", "wdf");
     // 不同于
     document.cookie = "wdf";
-    ```js
+    ```
 
-## 设置网站url
+### 设置网站url
 ```js
 rsvm.siteInfo.url = "https://www.baidu.com/";
 ```
 框架自动根据改值做解析和location对象的构建，location.href, window.origin, document.URL等
 
-## 加载构建dom
+### 加载构建dom
 直接通过给 rsvm.siteInfo.html 复制上网页源码，即可构建
 ```js
 rsvm.siteInfo.html = "<html>......</html>";
@@ -34,13 +34,13 @@ rsvm.siteInfo.html = "<html>......</html>";
 + 如需“按需加载”，则调用rsvm.build(true), 会在script节点停止构建，此时你可以运行自己的代码，后再调用rsvm.build(true)构建碰到script节点，再继续运行你的代码
 + 不需“按需加载”，则调用rsvm.build(false)可从当前将要加载的节点开始直接将dom构建完成。
 
-## 版本控制
+### 版本控制
 不同的脚本可根据rsvm.siteInfo.version进行返回值的控制
 ```js
 rsvm.siteInfo.version = "rs6_yaojian";
 ```
 
-## 缺值/补值
+### 缺值/补值
 调试时可通过rsvm.ifProxy=true在框架加载时给一般对象进行代理，全局对象的代理通过在使用isolated-rsvm插件创建上下文时设置rsvm和intercept参数为true
 ```js
 let context = await isolate.createContext({ inspector: true, rsvm: true, intercept: true });
